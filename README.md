@@ -83,9 +83,11 @@ bpe-tokeniser/
 
 ### Core Functions
 
-- `get_pair_stats(splits)`: Counts frequencies of adjacent symbol pairs
-- `merge_pair(pair_to_merge, splits)`: Merges specified pair in word splits
-- Main training loop: Iteratively finds and merges most frequent pairs
+- `get_pair_stats(splits)`: Counts frequencies of adjacent symbol pairs.
+- `merge_pair(pair_to_merge, splits)`: Merges a specified pair in the word splits.
+- `encode(text, merges)`: Encodes a new string into tokens using the learned merges.
+- `decode(tokens)`: Decodes a list of tokens back into a string.
+- Main training loop: Iteratively finds and merges the most frequent pairs.
 
 ### Data Structures
 
@@ -126,13 +128,41 @@ This BPE implementation demonstrates the core algorithm used in:
 - **Text Compression**: Original BPE application
 - **Multilingual NLP**: Cross-lingual vocabulary sharing
 
+## Encoding and Decoding
+
+The script now includes `encode()` and `decode()` functions to apply the learned BPE model to new text.
+
+### `encode(text, merges)`
+- **Input**: A string of text and the learned `merges` dictionary.
+- **Output**: A list of BPE tokens.
+
+### `decode(tokens)`
+- **Input**: A list of BPE tokens.
+- **Output**: The reconstructed string.
+
+Example usage is included at the end of `coding_tokeniser.py`:
+```python
+# -- Example of Encoding and Decoding --
+print("
+-- Encoding/Decoding Example --")
+sample_text = "This is a test of the BPE tokeniser."
+print(f"Original Text: {sample_text}")
+
+encoded_output = encode(sample_text, merges)
+print(f"Encoded Output: {encoded_output}")
+
+decoded_output = decode(encoded_output)
+print(f"Decoded Output: {decoded_output}")
+```
+
 ## Future Enhancements
 
-- [ ] Encode/decode functions for applying learned BPE to new text
+- [x] Encode/decode functions for applying learned BPE to new text
 - [ ] Save/load trained models
 - [ ] Performance optimisations for larger corpora
 - [ ] Regex-based pre-tokenisation improvements
 - [ ] Comparison with other tokenisation methods
+
 
 ---
 

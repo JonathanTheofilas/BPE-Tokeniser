@@ -216,3 +216,73 @@ print("\nFinal Vocabulary (sorted)")
 # Sort for consistent viewing
 final_vocab_sorted = sorted(list(set(vocab))) # Use set to remove potential duplicates if any step introduced them
 print(final_vocab_sorted)
+
+
+def encode(text, merges):
+    """Encodes a string into a list of tokens using the learned merges."""
+    words = text.split(' ')
+    all_tokens = []
+    
+    # Create a ranked list of merges
+    merge_ranks = {pair: i for i, pair in enumerate(merges.keys())}
+
+    for word in words:
+        if not word:
+            continue
+        
+        tokens = list(word) + [end_of_word]
+        
+        while True:
+            # Find the pair with the lowest rank in the current tokens
+            best_pair = None
+            min_rank = float('inf')
+            
+            for i in range(len(tokens) - 1):
+                pair = (tokens[i], tokens[i+1])
+                if pair in merge_ranks and merge_ranks[pair] < min_rank:
+                    min_rank = merge_ranks[pair]
+                    best_pair = pair
+
+            if best_pair is None:
+                break
+
+            # Merge the best pair
+            first, second = best_pair
+            new_tokens = []
+            i = 0
+            while i < len(tokens):
+                if i < len(tokens) - 1 and tokens[i] == first and tokens[i+1] == second:
+                    new_tokens.append(first + second)
+                    i += 2
+                else:
+                    new_tokens.append(tokens[i])
+                    i += 1
+            tokens = new_tokens
+            
+        all_tokens.extend(tokens)
+        
+    return all_tokens
+
+def decode(tokens):
+    """Decodes a list of tokens back into a string."""
+    text = "".join(tokens)
+    text = text.replace(end_of_word, ' ')
+    return text.strip()
+
+# -- Example of Encoding and Decoding --
+print("\n-- Encoding/Decoding Example --")
+sample_text = "This is a test of the BPE tokeniser."
+print(f"Original Text: {sample_text}")
+
+encoded_output = encode(sample_text, merges)
+print(f"Encoded Output: {encoded_output}")
+
+decoded_output = decode(encoded_output)
+print(f"Decoded Output: {decoded_output}")
+
+another_sample = "deep learning"
+print(f"\nOriginal Text: {another_sample}")
+encoded_output = encode(another_sample, merges)
+print(f"Encoded Output: {encoded_output}")
+decoded_output = decode(encoded_output)
+print(f"Decoded Output: {decoded_output}")
