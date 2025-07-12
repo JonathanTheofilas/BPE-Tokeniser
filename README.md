@@ -74,7 +74,8 @@ Learned Merges:
 
 ```
 bpe-tokeniser/
-├── coding_tokeniser.py    # Complete BPE implementation with large corpus
+├── coding_tokeniser.py    # Complete BPE implementation
+├── corpus.py              # Corpus data
 ├── LICENSE                # Project license
 └── README.md             # This documentation
 ```
